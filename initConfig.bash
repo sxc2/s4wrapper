@@ -105,7 +105,7 @@ LoopSyncForBucket()
 	initSync=$(s4cmd.py sync $S3_BUCKET $LOCAL_SYNC_DIR -r -s);
 	echo -e "  ${COL_WHITE}Finished initial sync with $S3_BUCKET ${COL_RESET}";
 
-	initSize=$(s4cmd.py du s3://clarity-cebu/ -r);
+	initSize=$(s4cmd.py du $S3_BUCKET -r);
 	parseLineForSize "$initSize";
 
 	local beginSize=$(( $tempsize ));
@@ -117,7 +117,7 @@ LoopSyncForBucket()
 		sleep 30
 		tempsize=0;
 
-		initSize=$(s4cmd.py du s3://clarity-cebu/ -r);
+		initSize=$(s4cmd.py du $S3_BUCKET -r);
 		parseLineForSize "$initSize";
 
 		if (( tempsize )); then
