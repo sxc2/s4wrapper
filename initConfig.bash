@@ -62,7 +62,7 @@ firstTimeInit() {
 				echo "$LOCAL_SYNC_DIR" >> "$CONFIGFILE"
 				echo " " >> "$CONFIGFILE"
 
-				mkdir LOCAL_SYNC_DIR;
+				mkdir $LOCAL_SYNC_DIR;
 
 				alwaysInit; break;;
 	        No ) exit;;
@@ -153,7 +153,7 @@ CheckEnvironmentVariables()
 	 			0)  S3_BUCKET="$LINE" ;;
 	    		1)  S3_ACCESS_KEY="$LINE" ;;
 	    		2)  S3_SECRET_KEY="$LINE" ;;
-	    		4)  LOCAL_SYNC_DIR="$LINE" ;;
+	    		3)  LOCAL_SYNC_DIR="$LINE" ;;
 			esac
 		fi
 		
