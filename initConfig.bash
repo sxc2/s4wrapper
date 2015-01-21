@@ -62,7 +62,7 @@ firstTimeInit() {
 				echo "$LOCAL_SYNC_DIR" >> "$CONFIGFILE"
 				echo " " >> "$CONFIGFILE"
 
-				mkdir LOCAL_SYNC_DIR;
+				mkdir $LOCAL_SYNC_DIR;
 
 				alwaysInit; break;;
 	        No ) exit;;
@@ -123,11 +123,14 @@ LoopSyncForBucket()
 		if (( tempsize )); then
 			if [ "$tempsize" != "$beginSize" ]; then
 				echo -e "  ${COL_YELLOW}New bits found, starting delta sync: $tempsize $beginSize ${COL_RESET}";
-				initSync=$(s4cmd.py sync $S3_BUCKET $LOCAL_SYNC_DIR -r -s);
+				if initSync=$(s4cmd.py sync $S3_BUCKET $LOCAL_SYNC_DIR -r -s); then
 
-				tempDelta=$(( $tempsize - $beginSize ));
-				echo -e "  ${COL_GREEN}Updated bits: $tempDelta ${COL_RESET}";
-				beginSize=$(( $tempsize ));
+					tempDelta=$(( $tempsize - $beginSize ));
+					echo -e "  ${COL_GREEN}Updated bits, exitcode: $?  $tempDelta sync'ed ${COL_RESET}";
+					beginSize=$(( $tempsize ));
+				else 
+					echo -e "  ${COL_YELLOW}Failed in updating bits, exitcode: $? retrying... ${COL_RESET}";
+				fi
 			fi
 		fi
 
@@ -153,7 +156,7 @@ CheckEnvironmentVariables()
 	 			0)  S3_BUCKET="$LINE" ;;
 	    		1)  S3_ACCESS_KEY="$LINE" ;;
 	    		2)  S3_SECRET_KEY="$LINE" ;;
-	    		4)  LOCAL_SYNC_DIR="$LINE" ;;
+	    		3)  LOCAL_SYNC_DIR="$LINE" ;;
 			esac
 		fi
 		
